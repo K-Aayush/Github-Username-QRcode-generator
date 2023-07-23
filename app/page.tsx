@@ -11,12 +11,21 @@ export default function Home() {
 
   const generate = () => {
     if (userName.trim() === '') {
-      setErrorMessage('Field is empty. Please enter a user name.');
+      setErrorMessage('Field is empty. Please enter a github user name.');
       setSrc('');
     } else {
       QRCode.toDataURL(`https://github.com/${userName}`).then(setSrc);
       setErrorMessage('');
     }
+  }
+
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = src;
+    link.download = 'qr-code.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   return (
@@ -45,13 +54,23 @@ export default function Home() {
 
       <div className='text-center'>
         {src ? (
-          <Image
-            className='blok mx-auto'
-            src={src}
-            alt='qr Code'
-            width={200}
-            height={200}
-          />) : null}
+          <>
+            <Image
+              className='block mx-auto'
+              src={src}
+              alt='qr code'
+              width={200}
+              height={200}
+            />
+            <button
+              className='text-white bg-gray-800 hover:bg-gray-900 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700'
+              type='button'
+              onClick={handleDownload}
+            >
+              Download
+            </button>
+          </>
+        ) : null}
       </div>
     </main>
   )
